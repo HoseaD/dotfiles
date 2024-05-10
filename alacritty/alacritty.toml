@@ -15,19 +15,20 @@ TERM = "xterm-256color"
 size = 14
 
 [font.bold]
-family = "SFMono Nerd Font"
-style = "Heavy"
+family = "Hack Nerd Font Mono"
+style = "Bold"
 
 [font.bold_italic]
-family = "SFMono Nerd Font"
-style = "Heavy Italic"
+family = "Hack Nerd Font Mono"
+style = "Bold Italic"
+
 [font.italic]
-family = "SFMono Nerd Font"
-style = "Medium Italic"
+family = "Hack Nerd Font Mono"
+style = "Italic"
 
 [font.normal]
-family = "SFMono Nerd Font"
-style = "Medium"
+family = "Hack Nerd Font Mono"
+style = "Regular"
 
 [window]
 decorations = "buttonless"
