@@ -18,6 +18,12 @@ function M.config()
   vim.api.nvim_set_keymap("n", "<leader>r", ":VimtexCompile<CR>", { noremap = true, silent = true })
   vim.g["vimtex_view_skim_sync"] = 1
   vim.g["vimtex_view_skim_activate"] = 1
+
+  vim.g["vimtex_compiler_latexmk"] = {
+         aux_dir = ".aux",
+         out_dir = "out"
+        }
+
 end
 
 return M
