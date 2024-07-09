@@ -14,6 +14,7 @@ return {
       fg = "#c3ccdc",
       bg = "#112638",
       inactive_bg = "#2c3043",
+      semilightgray = "#9ca3af",
     }
 
     local my_lualine_theme = {
@@ -49,6 +50,15 @@ return {
       },
     }
 
+    local function getWords()
+      local wc = vim.fn.wordcount()
+      if vim.fn.mode() == "v" or vim.fn.mode() == "\22" then -- Visual mode or Visual Block mode
+        return wc.visual_words == 1 and wc.visual_words .. " word" or wc.visual_words .. " words"
+      else
+        return wc.words .. " words"
+      end
+    end
+
     -- configure lualine with modified theme
     lualine.setup({
       options = {
@@ -61,6 +71,7 @@ return {
             cond = lazy_status.has_updates,
             color = { fg = "#ff9e64" },
           },
+          { getWords },
           { "encoding" },
           { "fileformat" },
           { "filetype" },
