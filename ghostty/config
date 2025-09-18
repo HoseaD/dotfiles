@@ -1,0 +1,17 @@
+theme = catppuccin-frappe
+
+macos-titlebar-style = hidden
+
+window-padding-y = 5,2
+window-padding-x = 4,2
+
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+l=goto_split:right
+keybind = ctrl+shift+j=goto_split:bottom
+keybind = ctrl+shift+k=goto_split:top
+
+keybind = global:option+period=toggle_quick_terminal
+
+quit-after-last-window-closed = false
+
+unfocused-split-opacity = 0.95
