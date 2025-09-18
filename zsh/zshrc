@@ -5,8 +5,15 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+if [[ "$TERM" == "xterm-kitty" ]]; then
+  ZSH_TMUX_AUTOSTART=true
+fi
+
+export MANPAGER="nvim +Man!"
+
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
 
 
 # Path to your oh-my-zsh installation.
@@ -50,6 +57,7 @@ plugins=(
 	docker
 	# zsh-autosuggestions
 	node
+	tmux
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -112,6 +120,7 @@ fi
 # ALIAS
 alias vi="nvim"
 alias eza="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias idot="dot -Gmargin=0.7 '-Gbgcolor=#ffffff00' -Gcolor=white -Gfontcolor=white -Ncolor=white -Nfontcolor=white -Ecolor=white -T png | kitty +kitten icat"
 
 # include Z
 #. /opt/homebrew/etc/profile.d/z.sh
@@ -180,3 +189,23 @@ _fzf_comprun() {
   esac
 }
 
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export PATH="/usr/local/texlive/2025/bin/universal-darwin:$PATH"
+
+export PATH="/Users/hosea/Repository/tdf/target/release:$PATH"
+export PATH="/Users/hosea/Repository/snowballer/target/release:$PATH"
+
+## jj completions
+autoload -U compinit
+compinit
+source <(jj util completion zsh)
