@@ -1,8 +1,4 @@
 local opt = vim.opt
-  -- disable netrw at the very start of your init.lua
-	-- to avoid conflict to nvim-tree
-  vim.g.loaded_netrw = 1
-  vim.g.loaded_netrwPlugin = 1
 
 -- enable line number and relative line number
 opt.number = true
@@ -12,15 +8,15 @@ opt.relativenumber = true
 opt.mouse = "a"
 
 -- tabs & indentation
-opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
-opt.shiftwidth = 2 -- 2 spaces for indent width
+opt.tabstop = 4 -- 2 spaces for tabs (prettier default)
+opt.shiftwidth = 4 -- 2 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 
 -- line wrapping
 opt.wrap = true -- enable line wrapping
 opt.showbreak = '+++'
-opt.colorcolumn = "80"
+opt.colorcolumn = "100"
 
 opt.cmdheight = 0
 
