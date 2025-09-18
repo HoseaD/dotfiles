@@ -1,7 +1,16 @@
-ln -s ~/dotfiles/alacritty ~/.config/alacritty
+# Shell setup
 ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
+
+# Terminal Emulator
+ln -s ~/dotfiles/ghostty ~/.config/ghostty
+
+# Editor
+ln -s ~/dotfiles/nvim ~/.config/nvim
+
+# Cli tools
+ln -s ~/dotfiles/yazi ~/.config/yazi
+
+# Window Manager
 ln -s ~/dotfiles/yabai ~/.config/yabai
 ln -s ~/dotfiles/skhd ~/.config/skhd
-ln -s ~/dotfiles/nvim ~/.config/nvim
-ln -s ~/dotfiles/tmux/ ~/.config/tmux
-ln -s ~/dotfiles/kitty/ ~/.config/kitty
+
