@@ -3,12 +3,12 @@ local M = {
 }
 
 function M.config()
-  vim.g["vimtex_view_method"] = "skim" -- main variant with xdotool (requires X11; not compatible with wayland)
+  vim.g["vimtex_view_method"] = "general" -- main variant with xdotool (requires X11; not compatible with wayland)
   vim.g["tex_flavor"] = "latex" -- how to read tex files
   vim.g["tex_indent_items"] = 0 -- turn off enumerate indent
   vim.g["tex_indent_brace"] = 0 -- turn off brace indent
   vim.g["vimtex_syntax_enabled"] = 1 -- Syntax highlighting
-  vim.g["vimtex_context_pdf_viewer"] = "skim" -- external PDF viewer run from vimtex menu command
+  -- vim.g["vimtex_context_pdf_viewer"] = "skim" -- external PDF viewer run from vimtex menu command
   vim.g["vimtex_log_ignore"] = { -- Error suppression:
     "Underfull",
     "Overfull",
