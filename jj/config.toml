@@ -1,0 +1,8 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+name = "Hosea Dietenhofer"
+email = "hosea.dietenhofer@student.uibk.ac.at"
+
+[ui]
+paginate = "never"
