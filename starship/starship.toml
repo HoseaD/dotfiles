@@ -1,0 +1,18 @@
+
+add_newline = false
+format = """$directory$character"""
+right_format = """$all"""
+
+
+[rust]
+symbol = ""
+format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+
+[package]
+disabled = true
+
+[git_status]
+conflicted = '🏳'
+untracked = '[?\($count\)](red)'
+modified = '[!\($count\)](blue)'
+staged = '[++\($count\)](green)'
