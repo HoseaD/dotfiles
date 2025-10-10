@@ -1,0 +1,10 @@
+brew "atuin"
+brew "carapace"
+brew "starship"
+brew "yazi"
+brew "zoxide"
+brew "zsh-autocomplete"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+
+cask "ghostty"
