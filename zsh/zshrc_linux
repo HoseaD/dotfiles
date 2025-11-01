@@ -1,0 +1,63 @@
+# omarchy-shell config
+source ~/.local/share/omarchy/default/bash/aliases
+source ~/.local/share/omarchy/default/bash/functions
+source ~/.local/share/omarchy/default/bash/envs
+
+# Starship
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+eval "$(starship init zsh)"
+
+# Carapace
+autoload -Uz compinit
+compinit
+
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+
+
+# Default Editor
+export EDITOR='nvim'
+export VISUAL='nvim'
+
+# PATH 
+export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/Users/hosea/Repository/tdf/target/release:$PATH"
+
+
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Dirs
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+
+# RM save delete (better use trash)
+alias rm="rm -i"
+
+# Yazi
+# alias y="yazi"
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# Neovim
+alias vi="nvim"
+
+# VI Mode!!!
+bindkey -v
+
+# Zoxide
+eval "$(zoxide init zsh --cmd cd)"
+
+# Atuin - shell history
+eval "$(atuin init zsh)"
