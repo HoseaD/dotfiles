@@ -11,6 +11,7 @@ return {
 
     dap.adapters.lldb = {
       type = 'executable',
+      -- command = '/usr/bin/lldb'
       command = '/opt/homebrew/opt/llvm/bin/lldb-dap',
       name = 'lldb'
     }
