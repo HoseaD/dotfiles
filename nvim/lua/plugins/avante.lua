@@ -4,7 +4,7 @@
 --   --     model = "qwen3-large:latest",
 --   --   }
 --   -- },
-return {
+local A = {
   "yetone/avante.nvim",
   event = "VeryLazy",
   version = false, -- Never set this value to "*"! Never!
@@ -66,3 +66,5 @@ return {
     },
   },
 }
+
+return {}
