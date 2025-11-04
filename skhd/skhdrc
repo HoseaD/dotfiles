@@ -3,7 +3,7 @@
 # ███████╗█████╔╝ ███████║██║  ██║
 # ╚════██║██╔═██╗ ██╔══██║██║  ██║
 # ███████║██║  ██╗██║  ██║██████╔╝
-# ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
+#lt ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
 # Simple hotkey daemon for macOS
 # https://github.com/koekeishiya/skhd
 
@@ -47,7 +47,7 @@ alt - t : yabai -m window --toggle float;\
 alt - e : yabai -m window --toggle split
 
 # toggle window split type
-alt - m : yabai -m space --toggle mission-control
+# alt - m : yabai -m space --toggle mission-control
 
 # balance size of windows
 shift + alt - 0 : yabai -m space --balance
