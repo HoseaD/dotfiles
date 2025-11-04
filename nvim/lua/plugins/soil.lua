@@ -7,4 +7,4 @@ return {
     lazy = true,
     ft = "plantuml",
     opts = {        }
-    }
+}
