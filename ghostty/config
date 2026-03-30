@@ -6,12 +6,13 @@ macos-icon = custom
 window-padding-y = 5,2
 window-padding-x = 4,2
 
-keybind = unconsumed:ctrl+h=goto_split:left
-keybind = unconsumed:ctrl+j=goto_split:bottom
-keybind = unconsumed:ctrl+k=goto_split:top
-keybind = unconsumed:ctrl+l=goto_split:right
+# keybind = unconsumed:ctrl+h=goto_split:left
+# keybind = unconsumed:ctrl+j=goto_split:bottom
+# keybind = unconsumed:ctrl+k=goto_split:top
+# keybind = unconsumed:ctrl+l=goto_split:right
 
 keybind = global:option+period=toggle_quick_terminal
+
 quick-terminal-size = 25%
 
 quit-after-last-window-closed = false
