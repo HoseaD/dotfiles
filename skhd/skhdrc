@@ -1,23 +1,14 @@
-# ███████╗██╗  ██╗██╗  ██╗██████╗ 
-# ██╔════╝██║ ██╔╝██║  ██║██╔══██╗
-# ███████╗█████╔╝ ███████║██║  ██║
-# ╚════██║██╔═██╗ ██╔══██║██║  ██║
-# ███████║██║  ██╗██║  ██║██████╔╝
-#lt ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
-# Simple hotkey daemon for macOS
-# https://github.com/koekeishiya/skhd
-
 # focus window
-alt - h : yabai -m window --focus west
-alt - j : yabai -m window --focus south
-alt - k : yabai -m window --focus north
-alt - l : yabai -m window --focus east
+lalt - h : yabai -m window --focus west
+lalt - j : yabai -m window --focus south
+lalt - k : yabai -m window --focus north
+lalt - l : yabai -m window --focus east
 
 # swap managed window
-shift + alt - h : yabai -m window --swap west
-shift + alt - j : yabai -m window --swap south
-shift + alt - k : yabai -m window --swap north
-shift + alt - l : yabai -m window --swap east
+shift + lalt - h : yabai -m window --swap west
+shift + lalt - j : yabai -m window --swap south
+shift + lalt - k : yabai -m window --swap north
+shift + lalt - l : yabai -m window --swap east
 
 # move managed window
 shift + alt + ctrl - h : yabai -m window --warp west
@@ -26,10 +17,10 @@ shift + alt + ctrl - k : yabai -m window --warp north
 shift + alt + ctrl - l : yabai -m window --warp east
 
 # rotate tree
-alt - r : yabai -m space --rotate 90
+lalt - r : yabai -m space --rotate 90
 
 # toggle window fullscreen zoom
-alt - f : yabai -m window --toggle zoom-fullscreen
+lalt - f : yabai -m window --toggle zoom-fullscreen
 
 # alt - s : yabai -m window --toggle 
 # alt - s : yabai -m window --toggle sticky;\
@@ -47,7 +38,7 @@ alt - t : yabai -m window --toggle float;\
 alt - e : yabai -m window --toggle split
 
 # toggle window split type
-# alt - m : yabai -m space --toggle mission-control
+# shift - alt m : yabai -m space --layout bsp
 
 # balance size of windows
 shift + alt - 0 : yabai -m space --balance
@@ -83,4 +74,6 @@ ctrl + cmd - h : yabai -m window --resize right:-20:0 2> /dev/null || yabai -m w
 ctrl + cmd - j : yabai -m window --resize bottom:0:20 2> /dev/null || yabai -m window --resize top:0:20 2> /dev/null
 ctrl + cmd - k : yabai -m window --resize bottom:0:-20 2> /dev/null || yabai -m window --resize top:0:-20 2> /dev/null
 ctrl + cmd - l : yabai -m window --resize right:20:0 2> /dev/null || yabai -m window --resize left:20:0 2> /dev/null
+
+shift + lalt - space : bash ~/.config/sketchybar/toggle_bar.sh
 
