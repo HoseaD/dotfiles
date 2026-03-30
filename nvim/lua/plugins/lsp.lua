@@ -13,7 +13,7 @@ local M = { -- LSP Configuration & Plugins
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 
 		{ "j-hui/fidget.nvim", opts = {} },
-		'folke/neodev.nvim',
+		"folke/neodev.nvim",
 	},
 }
 
@@ -26,7 +26,14 @@ function M.config()
 			end
 
 			map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-			map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]References")
+			-- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]References")
+			map("gr", function ()
+				require("telescope.builtin").lsp_references({
+					path_display = { "absolute" },
+					trim_text = true
+				})
+			end, "[G]oto [R]References")
+
 			map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 			map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
 			map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]Symbols")
@@ -35,6 +42,7 @@ function M.config()
 			map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 			map("K", vim.lsp.buf.hover, "Hover Documentation")
 			map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+			-- map("<leader>ff", vim.lsp.buf.format, "[F]ormat current buffer")
 
 			-- highlight references of the word under your cursor when your cursor rests there for a little while.
 			local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -61,15 +69,26 @@ function M.config()
 		-- rust_analyzer = {},
 		clangd = {},
 		typos_lsp = {},
-		texlab = {},
+		texlab = {
+			settings = {
+				texlab = {
+					-- formatterLineLength = 80, -- Optional: Adjust line length
+					-- latexFormatter = "latexindent",
+					-- latexindent = {
+					-- 	modifyLineBreaks = true, -- Set to false if you don't want it to break long lines
+					-- },
+				},
+			},
+		},
 		lua_ls = {
 			settings = {
 				Lua = {
-					workspace = {checkThirdParty = false},
-					telemetry = {enabled = false},
+					workspace = { checkThirdParty = false },
+					telemetry = { enabled = false },
 					diagnostics = {
-						disable = { 'missing-fields' },
-						globals = {"vim"} },
+						disable = { "missing-fields" },
+						globals = { "vim" },
+					},
 				},
 			},
 		},
@@ -84,7 +103,7 @@ function M.config()
 	require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 	require("mason-lspconfig").setup({
-		ensure_installed = {"lua_ls"},
+		ensure_installed = { "lua_ls" },
 		handlers = {
 			function(server_name)
 				local server = servers[server_name] or {}

@@ -1,4 +1,3 @@
-
 local T = {
 	-- Fuzzy Finder (files, lsp, etc)
 	"nvim-telescope/telescope.nvim",
@@ -106,4 +105,4 @@ function T.config()
 	end, { desc = "[S]earch [N]eovim files" })
 end
 
-return T
+return {T}

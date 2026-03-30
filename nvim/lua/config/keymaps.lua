@@ -48,3 +48,14 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 -- map("n", "<Leader>dm", "<cmd>lua vim.cmd('RustLsp runnables')<CR>", {desc = "Rust Runables"})
 
 map('n', '<leader>fu', ':lua require("telescope.builtin").lsp_references()<CR>', { noremap = true, silent = true, desc = "Show usage in telescope"})
+
+-- NeoTest keymaps
+map("n", "<leader>tn", function() require("neotest").run.run() end, { desc = "Run nearest test" })
+map("n", "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, { desc = "Run file tests" })
+map("n", "<leader>td", function() require("neotest").run.run({ strategy = "dap" }) end, { desc = "Debug nearest test" })
+map("n", "<leader>ts", function() require("neotest").summary.toggle() end, { desc = "Toggle test summary" })
+map("n", "<leader>to", function() require("neotest").output.open({ enter = true }) end, { desc = "Open test output" })
+
+
+-- Formatter
+-- conform with leader ff

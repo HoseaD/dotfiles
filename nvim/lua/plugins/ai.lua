@@ -60,4 +60,4 @@ local opencode = {
   end,
 }
 
-return {nvim_opencode}
+return {}

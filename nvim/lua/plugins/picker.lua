@@ -1,4 +1,8 @@
-return {
+local mini = {
+  "nvim-mini/mini.pick"
+}
+
+local fzf = {
   "ibhagwan/fzf-lua",
   -- optional for icon support
   dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -6,3 +10,5 @@ return {
   -- dependencies = { "nvim-mini/mini.icons" },
   opts = {}
 }
+
+return {fzf, mini}

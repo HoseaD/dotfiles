@@ -15,7 +15,7 @@ opt.autoindent = true -- copy indent from current line when starting new one
 
 -- line wrapping
 opt.wrap = true -- enable line wrapping
-opt.showbreak = '+++'
+opt.showbreak = "+++"
 opt.colorcolumn = "100"
 
 opt.cmdheight = 0
