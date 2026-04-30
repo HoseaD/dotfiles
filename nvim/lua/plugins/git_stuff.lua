@@ -1,71 +1,40 @@
-local GITSIGNS = {
-	"lewis6991/gitsigns.nvim",
-	opts = {
-		signs = {
-			add = { text = "+" },
-			change = { text = "~" },
-			delete = { text = "_" },
-			topdelete = { text = "‾" },
-			changedelete = { text = "~" },
-		},
-	},
-}
+-- lua/plugins/git_stuff.lua
 
-local NEOGIT = {
-  "NeogitOrg/neogit",
-  lazy = true,
-  dependencies = {
-    "nvim-lua/plenary.nvim",         -- required
-    "sindrets/diffview.nvim",        -- optional - Diff integration
+-- 1. Gitsigns
+require("gitsigns").setup({
+    signs = {
+        add = { text = "+" },
+        change = { text = "~" },
+        delete = { text = "_" },
+        topdelete = { text = "‾" },
+        changedelete = { text = "~" },
+    },
+})
 
-    -- Only one of these is needed.
-    "nvim-telescope/telescope.nvim", -- optional
-    "ibhagwan/fzf-lua",              -- optional
-    "nvim-mini/mini.pick",           -- optional
-    "folke/snacks.nvim",             -- optional
-  },
-  cmd = "Neogit",
-  keys = {
-    { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
-  }
-}
+vim.keymap.set("n", "<leader>gg", function()
+    require("gitsigns").preview_hunk_inline()
+end, { desc = "[H]unk [I]nline Preview" })
 
+-- Navigation: Next/Previous Change
+vim.keymap.set("n", "]g", function()
+    require("gitsigns").next_hunk()
+end, { desc = "Next Git [H]unk" })
 
+vim.keymap.set("n", "[g", function()
+    require("gitsigns").prev_hunk()
+end, { desc = "Previous Git [H]unk" })
 
-local LAZYGIT = {
-    {
-        "kdheepak/lazygit.nvim",
-    	cmd = {
-    		"LazyGit",
-    		"LazyGitConfig",
-    		"LazyGitCurrentFile",
-    		"LazyGitFilter",
-    		"LazyGitFilterCurrentFile",
-    	},
-        -- optional for floating window border decoration
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-        },
-        -- setting the keybinding for LazyGit with 'keys' is recommended in
-        -- order to load the plugin when the command is run for the first time
-        keys = {
-           { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-        }
-    }
-}
+-- 2. Neogit
+-- Neogit requires a setup call. It will automatically detect mini.pick
+-- and diffview since we installed them!
+require("neogit").setup({})
 
-local JJ = {
-    "nicolasgb/jj.nvim",
-    version = "*", -- Use latest stable release
-    -- Or from the main branch (uncomment the branch line and comment the version line)
-    -- branch = "main",
-    config = function()
-        require("jj").setup({})
-    end,
-}
+-- 3. Lazygit
+-- Lazygit doesn't strictly require a Lua setup call to work, just the keymap.
+vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
 
-local JJResolve = {
-    "rafikdraoui/jj-diffconflicts"
-}
+-- 4. Jujutsu (jj)
+require("jj").setup({})
 
-return {NEOGIT, GITSIGNS, LAZYGIT, JJ, JJResolve}
+-- jj-diffconflicts is just a standard Vim plugin that loads its own logic automatically,
+-- so it doesn't need any explicit setup here.

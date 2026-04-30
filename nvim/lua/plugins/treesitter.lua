@@ -1,33 +1,58 @@
-return {
-	"nvim-treesitter/nvim-treesitter",
-	build = ":TSUpdate",
-	config = function ()
-		local configs = require("nvim-treesitter.configs")
+-- lua/plugins/treesitter.lua
 
-		configs.setup({
-			ensure_installed = {"c","cpp", "lua", "vim", "vimdoc","rust", "query", "javascript", "html"},
-			sync_install = false,
-			highlight = { enable = true },
-			indent = { enable = true },
+-- 1. Install parsers (Replaces `ensure_installed` and `auto_install`)
+require("nvim-treesitter").install({
+    "c",
+    "lua",
+    "vim",
+    "vimdoc",
+    "query",
+    "markdown",
+    "markdown_inline",
+    "bash",
+    "rust",
+    "latex",
+})
 
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "<Enter>",
-					node_incremental = "<Enter>",
-					scope_incremental = false,
-					node_decremental = "<Backspace>",
-				}
-			}
-		})
-	end
-}
+-- 2. Enable Highlighting and Indentation natively
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("treesitter-startup", { clear = true }),
+    pattern = "*",
+    callback = function(event)
+        -- Safely start treesitter highlighting (pcall prevents errors on unsupported files)
+        pcall(vim.treesitter.start, event.buf)
 
+        -- Enable treesitter-based indentation
+        vim.bo[event.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
 
+        -- Optional: Enable treesitter-based code folding
+        vim.wo.foldmethod = "expr"
+        vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end,
+})
 
--- There are additional nvim-treesitter modules that you can use to interact
--- with nvim-treesitter. You should go explore a few and see what interests you:
---
---    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
---    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
---    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+-- 3. Configure Treesitter Text Objects independently
+require("nvim-treesitter-textobjects").setup({
+    select = {
+        enable = true,
+        lookahead = true, -- Automatically jump forward to textobj
+        keymaps = {
+            ["af"] = { query = "@function.outer", desc = "Select [A]round [F]unction" },
+            ["if"] = { query = "@function.inner", desc = "Select [I]nside [F]unction" },
+            ["ac"] = { query = "@class.outer", desc = "Select [A]round [C]lass" },
+            ["ic"] = { query = "@class.inner", desc = "Select [I]nside [C]lass" },
+        },
+    },
+    move = {
+        enable = true,
+        set_jumps = true,
+        goto_next_start = {
+            ["]m"] = "@function.outer",
+            ["]]"] = "@class.outer",
+        },
+        goto_previous_start = {
+            ["[m"] = "@function.outer",
+            ["[["] = "@class.outer",
+        },
+    },
+})

@@ -1,41 +1,31 @@
--- Neo-tree is a Neovim plugin to browse the file system
--- https://github.com/nvim-neo-tree/neo-tree.nvim
+-- 1. Disable netrw (This replaces the bottom of your Lazy 'init' function)
+-- It's best practice to do this before requiring neo-tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
-return {
-  'nvim-neo-tree/neo-tree.nvim',
-  version = '*',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-    'MunifTanjim/nui.nvim',
-  },
-  cmd = 'Neotree',
-  keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-  },
-  init = function()
-    if vim.fn.argc(-1) == 1 then
-      local stat = vim.loop.fs_stat(vim.fn.argv(0))
-      if stat and stat.type == "directory" then
-        require("neo-tree").setup({
-          filesystem = {
-            hijack_netrw_behavior = "open_current",
-          },
-        })
-      end
+-- 2. Global Keymaps (This replaces the Lazy 'keys' table)
+vim.keymap.set("n", "\\", ":Neotree reveal<CR>", { desc = "NeoTree reveal", silent = true })
+
+-- 3. The Directory Check (This replaces the top of your Lazy 'init' function)
+-- Note: In Neovim 0.10+, `vim.loop` was renamed to `vim.uv`. Since you are on 0.12,
+-- we should use the modern syntax!
+local hijack_behavior = "open_default"
+
+if vim.fn.argc(-1) == 1 then
+    local stat = vim.uv.fs_stat(vim.fn.argv(0)) -- Updated to vim.uv
+    if stat and stat.type == "directory" then
+        hijack_behavior = "open_current"
     end
+end
 
-  vim.g.loaded_netrw = 1
-  vim.g.loaded_netrwPlugin = 1
-  end,
-
-  opts = {
+-- 4. The Setup (This replaces the Lazy 'opts' table)
+require("neo-tree").setup({
     filesystem = {
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
+        hijack_netrw_behavior = hijack_behavior,
+        window = {
+            mappings = {
+                ["\\"] = "close_window",
+            },
         },
-      },
     },
-  },
-}
+})

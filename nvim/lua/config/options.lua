@@ -1,5 +1,7 @@
 local opt = vim.opt
 
+opt.shell = "/bin/zsh"
+
 -- enable line number and relative line number
 opt.number = true
 opt.relativenumber = true
@@ -50,13 +52,18 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
+-- Folding
+opt.foldlevel = 99 -- Using a high number ensures all folds are open
+opt.foldlevelstart = 99 -- Start with all folds open when opening a new buffer
+opt.foldenable = true -- Keep folding enabled
+
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
+    desc = "Highlight when yanking (copying) text",
+    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    callback = function()
+        vim.highlight.on_yank()
+    end,
 })

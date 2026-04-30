@@ -1,30 +1,66 @@
-local RA = {
-  'mrcjkb/rustaceanvim',
-  version = '^6', -- Recommended
-  lazy = false, -- This plugin is already lazy
-  ft = "rust",
+require("crates").setup()
 
-  config = function ()
-    vim.keymap.set("n", "<Leader>dt", "<cmd>lua vim.cmd('RustLsp testables')<CR>", { desc = "Debugger testables" })
-    vim.keymap.set("n", "<Leader>dr", "<cmd>lua vim.cmd('RustLsp runnables')<CR>", {desc = "Rust Runables"})
-  end
+-- Rebuild the identical capabilities here for rustaceanvim
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.general = capabilities.general or {}
+capabilities.general.positionEncodings = { "utf-8", "utf-16" }
+
+local has_blink, blink = pcall(require, "blink.cmp")
+if has_blink then
+    capabilities = blink.get_lsp_capabilities(capabilities)
+end
+
+-- Configure Rustaceanvim global options
+vim.g.rustaceanvim = {
+    tools = {
+        float_win_config = {
+            border = "rounded",
+        },
+    },
+    server = {
+        capabilities = capabilities, -- Pass the unified capabilities here!
+        default_settings = {
+            ["rust-analyzer"] = {
+                checkOnSave = true,
+                check = {
+                    command = "clippy",
+                },
+            },
+        },
+    },
 }
 
-local RV = {
-  'rust-lang/rust.vim',
-  ft = "rust",
-  init = function()
-    vim.g.rustfmt_autosave = 1
-  end
-}
+-- Rust-specific Keymaps & Auto-formatting
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("rust-custom-setup", { clear = true }),
+    pattern = "rust",
+    callback = function(event)
+        local bufnr = event.buf
 
-local RC = {
-  'saecki/crates.nvim',
-  tag = 'stable',
-  event = { "BufRead Cargo.toml" },
-  config = function()
-    require('crates').setup()
-  end,
-}
+        vim.keymap.set(
+            "n",
+            "<Leader>dt",
+            "<cmd>RustLsp testables<CR>",
+            { buffer = bufnr, desc = "Rust: [D]ebugger [T]estables" }
+        )
+        vim.keymap.set(
+            "n",
+            "<Leader>dr",
+            "<cmd>RustLsp runnables<CR>",
+            { buffer = bufnr, desc = "Rust: [D]ebugger [R]unnables" }
+        )
+        vim.keymap.set(
+            "n",
+            "<Leader>em",
+            "<cmd>RustLsp expandMacro<CR>",
+            { buffer = bufnr, desc = "Rust: [E]xpand [M]acro" }
+        )
 
-return {RA, RV, RC}
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            callback = function()
+                vim.lsp.buf.format({ async = false })
+            end,
+        })
+    end,
+})

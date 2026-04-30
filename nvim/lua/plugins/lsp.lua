@@ -1,120 +1,111 @@
-local M = { -- LSP Configuration & Plugins
-	"neovim/nvim-lspconfig",
-	opts = {
-		setup = {
-			rust_analyzer = function()
-				return true
-			end,
-		},
-	},
-	dependencies = {
-		"williamboman/mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
+-- 1. Setup standalone UI
+require("fidget").setup({})
 
-		{ "j-hui/fidget.nvim", opts = {} },
-		"folke/neodev.nvim",
-	},
-}
+-- lua/plugins/lsp.lua
 
-function M.config()
-	vim.api.nvim_create_autocmd("LspAttach", {
-		group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
-		callback = function(event)
-			local map = function(keys, func, desc)
-				vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-			end
-
-			map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-			-- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]References")
-			map("gr", function ()
-				require("telescope.builtin").lsp_references({
-					path_display = { "absolute" },
-					trim_text = true
-				})
-			end, "[G]oto [R]References")
-
-			map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-			map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-			map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]Symbols")
-			map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]Symbols")
-			map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-			map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-			map("K", vim.lsp.buf.hover, "Hover Documentation")
-			map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-			-- map("<leader>ff", vim.lsp.buf.format, "[F]ormat current buffer")
-
-			-- highlight references of the word under your cursor when your cursor rests there for a little while.
-			local client = vim.lsp.get_client_by_id(event.data.client_id)
-			if client and client.server_capabilities.documentHighlightProvider then
-				vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-					buffer = event.buf,
-					callback = vim.lsp.buf.document_highlight,
-				})
-
-				vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-					buffer = event.buf,
-					callback = vim.lsp.buf.clear_references,
-				})
-			end
-		end,
-	})
-
-	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-
-	local servers = {
-		-- gopls = {},
-		-- pyright = {},
-		-- rust_analyzer = {},
-		clangd = {},
-		typos_lsp = {},
-		texlab = {
-			settings = {
-				texlab = {
-					-- formatterLineLength = 80, -- Optional: Adjust line length
-					-- latexFormatter = "latexindent",
-					-- latexindent = {
-					-- 	modifyLineBreaks = true, -- Set to false if you don't want it to break long lines
-					-- },
-				},
-			},
-		},
-		lua_ls = {
-			settings = {
-				Lua = {
-					workspace = { checkThirdParty = false },
-					telemetry = { enabled = false },
-					diagnostics = {
-						disable = { "missing-fields" },
-						globals = { "vim" },
-					},
-				},
-			},
-		},
-	}
-
-	require("mason").setup()
-
-	local ensure_installed = vim.tbl_keys(servers or {})
-	vim.list_extend(ensure_installed, {
-		"stylua", -- Used to format lua code
-	})
-	require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-	require("mason-lspconfig").setup({
-		ensure_installed = { "lua_ls" },
-		handlers = {
-			function(server_name)
-				local server = servers[server_name] or {}
-				-- This handles overriding only values explicitly passed
-				-- by the server configuration above. Useful when disabling
-				-- certain features of an LSP (for example, turning off formatting for tsserver)
-				server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-				require("lspconfig")[server_name].setup(server)
-			end,
-		},
-	})
+-- 1. Intercept the core floating window builder and forcefully inject rounded borders
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+    opts = opts or {}
+    opts.border = opts.border or "rounded"
+    opts.max_width = opts.max_width or 100
+    return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
 
-return M
+-- 2. Ensure diagnostic popups (like when you view an error message) also get the border
+vim.diagnostic.config({
+    float = { border = "rounded" },
+})
+
+-- 2. Define your LSP Keymaps & Autocmds
+-- (This stays exactly the same as before using LspAttach)
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+    callback = function(event)
+        local map = function(keys, func, desc)
+            vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+        end
+
+        -- Replace the old Telescope mappings with mini.extra LSP pickers
+        map("gd", function()
+            require("mini.extra").pickers.lsp({ scope = "definition" })
+        end, "[G]oto [D]efinition")
+
+        map("gr", function()
+            require("mini.extra").pickers.lsp({ scope = "references" })
+        end, "[G]oto [R]eferences")
+
+        map("gI", function()
+            require("mini.extra").pickers.lsp({ scope = "implementation" })
+        end, "[G]oto [I]mplementation")
+
+        map("<leader>D", function()
+            require("mini.extra").pickers.lsp({ scope = "type_definition" })
+        end, "Type [D]efinition")
+
+        map("<leader>ds", function()
+            require("mini.extra").pickers.lsp({ scope = "document_symbol" })
+        end, "[D]ocument [S]ymbols")
+
+        map("<leader>ws", function()
+            require("mini.extra").pickers.lsp({ scope = "workspace_symbol" })
+        end, "[W]orkspace [S]ymbols")
+
+        map("K", vim.lsp.buf.hover, "Hover Documentation")
+
+        map("<leader>rn", vim.lsp.buf.rename, "Rename")
+    end,
+})
+
+-- 3. Define Capabilities (Integration with Blink & Encoding Fix)
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+-- FORCE all servers to agree on UTF-8 as the primary position encoding
+capabilities.general = capabilities.general or {}
+capabilities.general.positionEncodings = { "utf-8", "utf-16" }
+
+local has_blink, blink = pcall(require, "blink.cmp")
+if has_blink then
+    capabilities = blink.get_lsp_capabilities(capabilities)
+end
+
+-- 4. Configure specific servers using the NEW native API
+-- You only need to call this for servers where you are overriding default settings.
+vim.lsp.config("lua_ls", {
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            workspace = { checkThirdParty = false },
+            telemetry = { enabled = false },
+            diagnostics = { disable = { "missing-fields" }, globals = { "vim" } },
+        },
+    },
+})
+
+vim.lsp.config("texlab", {
+    capabilities = capabilities,
+    settings = { texlab = {} },
+})
+
+-- For servers that just need standard capabilities with no custom settings:
+vim.lsp.config("clangd", { capabilities = capabilities })
+vim.lsp.config("typos_lsp", { capabilities = capabilities })
+
+-- 5. Boot up Mason
+require("mason").setup()
+
+require("mason-tool-installer").setup({
+    ensure_installed = {
+        "lua_ls",
+        "clangd",
+        "typos_lsp",
+        "texlab",
+        "stylua",
+    },
+})
+
+require("mason-lspconfig").setup({
+    -- Mason-lspconfig will now automatically detect installed servers
+    -- and enable them under the hood using Neovim's native vim.lsp.enable().
+    -- No more handlers table needed!
+})
