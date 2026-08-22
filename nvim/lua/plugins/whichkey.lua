@@ -31,7 +31,8 @@ wk.setup({
 -- It now uses wk.add() instead of the old wk.register().
 wk.add({
     { "<leader>f", group = "[F]ind / File" },
-    { "<leader>g", group = "[G]it" },
+    { "<leader>c", group = "[C]hanges" },
+    { "<leader>j", group = "[J]ujutsu" },
     { "<leader>w", group = "[W]orkspace" },
     { "<leader>t", group = "[T]ests / Coverage" },
     { "z", group = "[Z]folding" },

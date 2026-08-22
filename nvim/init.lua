@@ -23,12 +23,11 @@ vim.pack.add({
 
     -- Git & VCS
     "https://github.com/lewis6991/gitsigns.nvim",
-    "https://github.com/sindrets/diffview.nvim", -- Highly recommended for Neogit
-    "https://github.com/NeogitOrg/neogit",
-    "https://github.com/kdheepak/lazygit.nvim",
+    "https://github.com/sindrets/diffview.nvim", -- Changed-file tree & diff browser
     -- Jujutsu
     { src = "https://github.com/nicolasgb/jj.nvim", branch = "main" },
-    "https://github.com/rafikdraoui/jj-diffconflicts",
+    -- Interactive diff-editor for jj split/squash (see ui.diff-editor in jj config)
+    { src = "https://github.com/julienvincent/hunk.nvim", version = vim.version.range("1") },
 
     -- Flash - sneak through the code
     "https://github.com/folke/flash.nvim",

@@ -2,6 +2,9 @@ local opt = vim.opt
 
 opt.shell = "/bin/zsh"
 
+-- Better diffs everywhere (gitsigns, diffview, :diffthis)
+opt.diffopt:append({ "internal", "filler", "closeoff", "algorithm:histogram", "linematch:60" })
+
 -- Draw rounded borders on all floating windows (LSP hover, diagnostics, etc.)
 vim.o.winborder = "rounded"
 
