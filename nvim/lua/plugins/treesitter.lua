@@ -12,6 +12,7 @@ require("nvim-treesitter").install({
     "bash",
     "rust",
     "latex",
+    "typst",
 })
 
 -- 2. Enable Highlighting and Indentation natively

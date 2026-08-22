@@ -27,7 +27,7 @@ vim.pack.add({
     "https://github.com/NeogitOrg/neogit",
     "https://github.com/kdheepak/lazygit.nvim",
     -- Jujutsu
-    "https://github.com/nicolasgb/jj.nvim",
+    { src = "https://github.com/nicolasgb/jj.nvim", branch = "main" },
     "https://github.com/rafikdraoui/jj-diffconflicts",
 
     -- Flash - sneak through the code
@@ -63,7 +63,7 @@ vim.pack.add({
     "https://github.com/rafamadriz/friendly-snippets",
 
     -- Rust
-    { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("8") },
+    { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
     "https://github.com/saecki/crates.nvim",
 
     -- Testing tools
@@ -74,13 +74,15 @@ vim.pack.add({
 
     -- Latex
     "https://github.com/lervag/vimtex",
+    -- Typst
+    "https://github.com/chomosuke/typst-preview.nvim",
 
     -- -- PlantUML / Soil
-    "https://github.com/javiorfo/nvim-nyctophilia",
-    "https://github.com/javiorfo/nvim-soil",
+    -- "https://github.com/javiorfo/nvim-nyctophilia",
+    -- "https://github.com/javiorfo/nvim-soil",
 
     -- Markdown
-    { src = "https://github.com/OXY2DEV/markview.nvim" },
+    -- { src = "https://github.com/OXY2DEV/markview.nvim" },
 })
 
 require("plugins.colorscheme")
@@ -90,8 +92,10 @@ require("plugins.formatter")
 require("plugins.picker")
 require("plugins.git_stuff")
 require("plugins.vimtex")
+require("plugins.typst")
 require("plugins.whichkey")
 require("plugins.cmp")
+-- require("plugins.markview")
 
 require("plugins.treesitter")
 

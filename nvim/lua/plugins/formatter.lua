@@ -8,6 +8,7 @@ require("conform").setup({
         toml = { "taplo" },
         markdown = { "prettier" },
         python = { "ruff_organize_imports", "ruff_fix", "ruff_format" },
+        typst = { "typstyle" },
         -- Examples for when you expand your workflow:
         -- python = { "isort", "black" },
         -- javascript = { "prettierd", "prettier", stop_after_first = true },

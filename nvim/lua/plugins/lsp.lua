@@ -87,6 +87,14 @@ vim.lsp.config("texlab", {
     settings = { texlab = {} },
 })
 
+vim.lsp.config("tinymist", {
+    capabilities = capabilities,
+    settings = {
+        exportPdf = "onSave",
+        formatterMode = "typstyle",
+    },
+})
+
 -- For servers that just need standard capabilities with no custom settings:
 vim.lsp.config("clangd", { capabilities = capabilities })
 vim.lsp.config("typos_lsp", { capabilities = capabilities })
@@ -101,6 +109,8 @@ require("mason-tool-installer").setup({
         "typos_lsp",
         "texlab",
         "stylua",
+        "tinymist",
+        "typstyle",
     },
 })
 
