@@ -2,16 +2,19 @@ local opt = vim.opt
 
 opt.shell = "/bin/zsh"
 
+-- Draw rounded borders on all floating windows (LSP hover, diagnostics, etc.)
+vim.o.winborder = "rounded"
+
 -- enable line number and relative line number
 opt.number = true
 opt.relativenumber = true
 
--- disable mouse
+-- enable mouse support in all modes
 opt.mouse = "a"
 
 -- tabs & indentation
-opt.tabstop = 4 -- 2 spaces for tabs (prettier default)
-opt.shiftwidth = 4 -- 2 spaces for indent width
+opt.tabstop = 4 -- 4 spaces per tab character
+opt.shiftwidth = 4 -- 4 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 
@@ -52,7 +55,9 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
--- Folding
+-- Folding (treesitter-based; see lua/plugins/treesitter.lua)
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldlevel = 99 -- Using a high number ensures all folds are open
 opt.foldlevelstart = 99 -- Start with all folds open when opening a new buffer
 opt.foldenable = true -- Keep folding enabled

@@ -77,10 +77,6 @@ vim.pack.add({
     -- Typst
     "https://github.com/chomosuke/typst-preview.nvim",
 
-    -- -- PlantUML / Soil
-    -- "https://github.com/javiorfo/nvim-nyctophilia",
-    -- "https://github.com/javiorfo/nvim-soil",
-
     -- Markdown
     -- { src = "https://github.com/OXY2DEV/markview.nvim" },
 })
@@ -105,5 +101,3 @@ require("plugins.rust")
 
 require("plugins.flash")
 require("plugins.ui")
-
-require("plugins.soil")

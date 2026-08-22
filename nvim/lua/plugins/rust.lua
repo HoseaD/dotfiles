@@ -1,16 +1,6 @@
 require("crates").setup()
 
--- Rebuild the identical capabilities here for rustaceanvim
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.general = capabilities.general or {}
-capabilities.general.positionEncodings = { "utf-8", "utf-16" }
-
-local has_blink, blink = pcall(require, "blink.cmp")
-if has_blink then
-    capabilities = blink.get_lsp_capabilities(capabilities)
-end
-
--- Configure Rustaceanvim global options
+-- Reuse the shared capabilities (blink.cmp + utf-8 position encoding)
 vim.g.rustaceanvim = {
     tools = {
         float_win_config = {
@@ -18,7 +8,7 @@ vim.g.rustaceanvim = {
         },
     },
     server = {
-        capabilities = capabilities, -- Pass the unified capabilities here!
+        capabilities = require("config.capabilities"), -- Pass the unified capabilities here!
         default_settings = {
             ["rust-analyzer"] = {
                 checkOnSave = true,
@@ -56,11 +46,6 @@ vim.api.nvim_create_autocmd("FileType", {
             { buffer = bufnr, desc = "Rust: [E]xpand [M]acro" }
         )
 
-        vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            callback = function()
-                vim.lsp.buf.format({ async = false })
-            end,
-        })
+        -- Formatting is handled by conform's format_on_save (lsp_format fallback)
     end,
 })

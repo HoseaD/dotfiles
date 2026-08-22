@@ -3,19 +3,7 @@ require("fidget").setup({})
 
 -- lua/plugins/lsp.lua
 
--- 1. Intercept the core floating window builder and forcefully inject rounded borders
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-    opts = opts or {}
-    opts.border = opts.border or "rounded"
-    opts.max_width = opts.max_width or 100
-    return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
-
--- 2. Ensure diagnostic popups (like when you view an error message) also get the border
-vim.diagnostic.config({
-    float = { border = "rounded" },
-})
+-- Float borders are handled globally by `vim.o.winborder` (see config/options.lua)
 
 -- 2. Define your LSP Keymaps & Autocmds
 -- (This stays exactly the same as before using LspAttach)
@@ -57,17 +45,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
--- 3. Define Capabilities (Integration with Blink & Encoding Fix)
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
--- FORCE all servers to agree on UTF-8 as the primary position encoding
-capabilities.general = capabilities.general or {}
-capabilities.general.positionEncodings = { "utf-8", "utf-16" }
-
-local has_blink, blink = pcall(require, "blink.cmp")
-if has_blink then
-    capabilities = blink.get_lsp_capabilities(capabilities)
-end
+-- 3. Define Capabilities (shared with other LSP consumers via config.capabilities)
+local capabilities = require("config.capabilities")
 
 -- 4. Configure specific servers using the NEW native API
 -- You only need to call this for servers where you are overriding default settings.

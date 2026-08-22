@@ -20,15 +20,20 @@ vim.api.nvim_create_autocmd("FileType", {
     group = vim.api.nvim_create_augroup("treesitter-startup", { clear = true }),
     pattern = "*",
     callback = function(event)
-        -- Safely start treesitter highlighting (pcall prevents errors on unsupported files)
-        pcall(vim.treesitter.start, event.buf)
+        -- Skip heavy features for buffers flagged by the BigFileGuard autocmd
+        if vim.b[event.buf].is_large_file then
+            return
+        end
+
+        -- Safely start treesitter highlighting; skip indentation/folding when
+        -- no parser is available for this filetype
+        local ok = pcall(vim.treesitter.start, event.buf)
+        if not ok then
+            return
+        end
 
         -- Enable treesitter-based indentation
         vim.bo[event.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
-
-        -- Optional: Enable treesitter-based code folding
-        vim.wo.foldmethod = "expr"
-        vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     end,
 })
 

@@ -50,12 +50,10 @@ end, { desc = "Toggle Test Summary" })
 
 -- === Nvim-Coverage: For coverage metrics ===
 
-map(
-    "n",
-    "<leader>tc",
-    ":CoverageLoadLcov target/lcov.info<CR> | :CoverageShow<CR>",
-    { desc = "Load Workspace Coverage" }
-)
+map("n", "<leader>tc", function()
+    vim.cmd("CoverageLoadLcov target/lcov.info")
+    vim.cmd("CoverageShow")
+end, { desc = "Load Workspace Coverage" })
 map("n", "<leader>tt", ":CoverageToggle<CR>", { desc = "Show Coverage" })
 map("n", "<leader>tp", ":CoverageSummary<CR>", { desc = "Show Coverage Percentages" })
 map("n", "<leader>tx", ":CoverageClear<CR>", { desc = "Clear Coverage Markers" })

@@ -27,13 +27,13 @@ pick.setup({
     },
 })
 
--- Force mini.pick to use the exact same color palette as Noice's floating windows
+-- Keep mini.pick floats visually consistent with other floating windows
 vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = "*",
     callback = function()
         vim.api.nvim_set_hl(0, "MiniPickNormal", { link = "NormalFloat" })
         vim.api.nvim_set_hl(0, "MiniPickBorder", { link = "FloatBorder" })
-        vim.api.nvim_set_hl(0, "MiniPickPrompt", { link = "TelescopePromptTitle" }) -- Borrows a nice accent color
+        vim.api.nvim_set_hl(0, "MiniPickPrompt", { link = "FloatTitle" }) -- Matches float titles
     end,
 })
 

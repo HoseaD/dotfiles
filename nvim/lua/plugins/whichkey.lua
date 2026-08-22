@@ -32,9 +32,9 @@ wk.setup({
 wk.add({
     { "<leader>f", group = "[F]ind / File" },
     { "<leader>g", group = "[G]it" },
-    { "<leader>c", group = "[C]ode / LSP" },
     { "<leader>w", group = "[W]orkspace" },
+    { "<leader>t", group = "[T]ests / Coverage" },
     { "z", group = "[Z]folding" },
-    { "[", group = "prev", icon = " " },
-    { "]", group = "next", icon = " " },
+    { "[", group = "prev", icon = " " },
+    { "]", group = "next", icon = " " },
 })
